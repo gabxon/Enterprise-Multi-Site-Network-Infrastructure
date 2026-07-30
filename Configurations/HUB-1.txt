@@ -1,1 +1,126 @@
-
+!
+version 15.7
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname HUB-1
+!
+boot-start-marker
+boot-end-marker
+!
+enable secret <configured>
+!
+no aaa new-model
+!
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+no ip domain lookup
+ip domain name enterprise.lab
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+username admin privilege 15 secret <configured>
+!
+redundancy
+!
+interface Tunnel0
+ description DMVPN-NETWORK
+ ip address 172.16.0.1 255.255.255.0
+ no ip redirects
+ ip mtu 1400
+ ip nhrp authentication DMVPN123
+ ip nhrp network-id 100
+ ip tcp adjust-mss 1360
+ ip ospf network point-to-multipoint
+ ip ospf 10 area 0
+ tunnel source Ethernet0/0
+ tunnel mode gre multipoint
+ tunnel key 100
+!
+interface Ethernet0/0
+ description TO_EDGE1
+ ip address 172.16.100.2 255.255.255.252
+ duplex auto
+!
+interface Ethernet0/1
+ description TO_LONDON
+ ip address 172.16.100.9 255.255.255.252
+ duplex auto
+!
+interface Ethernet0/2
+ description TO_DUBLIN
+ ip address 172.16.100.13 255.255.255.252
+ duplex auto
+!
+interface Ethernet0/3
+ description TO_AMSTERDAM
+ ip address 172.16.100.33 255.255.255.252
+ duplex auto
+!
+interface Ethernet1/0
+ description TO_FRANKFURT
+ ip address 172.16.100.37 255.255.255.252
+ duplex auto
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+ duplex auto
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+ duplex auto
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+ duplex auto
+!
+router ospf 1
+ network 172.16.100.0 0.0.0.3 area 100
+ network 172.16.100.8 0.0.0.3 area 100
+ network 172.16.100.12 0.0.0.3 area 100
+ network 172.16.100.32 0.0.0.3 area 100
+ network 172.16.100.36 0.0.0.3 area 100
+!
+router ospf 10
+ router-id 101.101.101.101
+ network 172.16.0.1 0.0.0.0 area 0
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+ip ssh version 2
+!
+ipv6 ioam timestamp
+!
+control-plane
+!
+banner motd ^C
+***********************************************************
+* Unauthorized access is prohibited.                      *
+* Tier-1 Financial Enterprise Lab                         *
+* Project Author: Gabriel Tobi Idowu                      *
+***********************************************************
+^C
+!
+line con 0
+ exec-timeout 15 0
+ logging synchronous
+ login local
+!
+line aux 0
+!
+line vty 0 4
+ login local
+ transport input ssh
+!
+end
