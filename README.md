@@ -12,7 +12,7 @@ The environment simulates a headquarters campus connected to four international 
 
 ## Network Topology
 
-![Enterprise Multi-Site Network Infrastructure](Topology/Enterprise-Multi-Site-Network-Infrastructure.png)
+![Enterprise Multi-Site Network Infrastructure](Topology/topology.png)
 
 ### High-Level Architecture
 
