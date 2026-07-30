@@ -9,6 +9,77 @@ The solution follows a hierarchical campus architecture with a redundant Interne
 The environment simulates a headquarters campus connected to four international branch offices through a highly available WAN infrastructure.
 
 ---
+## Validation Highlights
+
+The following screenshots demonstrate successful implementation and verification of the core enterprise technologies used in this project.
+
+### OSPF
+
+<p align="center">
+  <img src="Screenshots/OSPF/ospf-neighbors.png" width="90%">
+</p>
+
+OSPF neighbor adjacencies successfully formed across the enterprise backbone.
+
+---
+
+### BGP
+
+<p align="center">
+  <img src="Screenshots/BGP/bgp-summary.png" width="90%">
+</p>
+
+eBGP sessions established with upstream ISPs and iBGP used for internal route exchange.
+
+---
+
+### DMVPN
+
+<p align="center">
+  <img src="Screenshots/DMVPN/dmvpn-status.png" width="90%">
+</p>
+
+DMVPN Phase 3 operational with successful tunnel establishment between hubs and branch routers.
+
+---
+
+### HSRP
+
+<p align="center">
+  <img src="Screenshots/HSRP/hsrp-dist1.png" width="90%">
+</p>
+
+HSRP configured to provide gateway redundancy across the distribution layer.
+
+---
+
+### VRF-Lite
+
+<p align="center">
+  <img src="Screenshots/VRF/vrf-table.png" width="90%">
+</p>
+
+VRF-Lite implemented to isolate departmental traffic while maintaining scalable Layer 3 segmentation.
+
+---
+
+### EtherChannel
+
+<p align="center">
+  <img src="Screenshots/EtherChannel/etherchannel-summary.png" width="90%">
+</p>
+
+LACP EtherChannel provides increased bandwidth and link redundancy between network devices.
+
+---
+
+### BFD
+
+<p align="center">
+  <img src="Screenshots/BFD/bfd-neighbors.png" width="90%">
+</p>
+
+Bidirectional Forwarding Detection (BFD) configured for rapid failure detection across critical routing adjacencies.
 <h2 align="center">Network Topology</h2>
 
 <p align="center">
