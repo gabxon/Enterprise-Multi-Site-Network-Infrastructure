@@ -15,6 +15,19 @@ The environment simulates a headquarters campus connected to four international 
   <img src="Topology/topology.png" alt="Enterprise Multi-Site Network Infrastructure" width="100%">
 </p>
 
+## 📑 Table of Contents
+
+- [Project Overview](#project-overview)
+- [Network Topology](#network-topology)
+- [Architecture Overview](#architecture-overview)
+- [Technologies Implemented](#technologies-implemented)
+- [Network Components](#network-components)
+- [High Availability](#high-availability)
+- [Validation](#validation)
+- [Repository Structure](#repository-structure)
+- [Future Enhancements](#future-enhancements)
+- [Author](#author)
+
 ### Architecture Overview
 
 The enterprise network consists of:
@@ -46,24 +59,37 @@ The enterprise network consists of:
 
 ## Technologies Implemented
 
-| Technology | Purpose |
-|------------|---------|
-| VRF-Lite | Layer 3 Segmentation |
-| VLAN Segmentation | Department Isolation |
-| Inter-VLAN Routing | Communication Between VLANs |
-| Multi-Area OSPF | Internal Routing |
-| eBGP | ISP Connectivity |
-| iBGP / MP-BGP | Enterprise Route Exchange |
-| DMVPN Phase 3 | Branch Connectivity |
-| NHRP | Tunnel Resolution |
-| HSRP | Default Gateway Redundancy |
-| EtherChannel (LACP) | Link Aggregation |
-| BFD | Fast Failure Detection |
-| SSH | Secure Device Management |
-
----
-
+| Technology | Role | Status |
+|------------|------|:------:|
+| VRF-Lite | Layer 3 Network Segmentation | ✅ |
+| VLAN Segmentation | Department Isolation | ✅ |
+| Inter-VLAN Routing | Communication Between VLANs | ✅ |
+| Multi-Area OSPF | Internal Dynamic Routing | ✅ |
+| eBGP | ISP Connectivity | ✅ |
+| iBGP | Internal Route Exchange | ✅ |
+| MP-BGP | VPNv4 Route Distribution | ✅ |
+| DMVPN Phase 3 | Branch WAN Connectivity | ✅ |
+| NHRP | Tunnel Resolution | ✅ |
+| HSRP | Default Gateway Redundancy | ✅ |
+| EtherChannel (LACP) | Link Aggregation | ✅ |
+| BFD | Fast Failure Detection | ✅ |
+| SSH | Secure Device Management | ✅ |
 ## Network Components
+
+## Project Statistics
+
+| Item | Value |
+|------|------:|
+| Headquarters | 1 |
+| Branch Offices | 4 |
+| Internet Service Providers | 2 |
+| DMVPN Hubs | 2 |
+| Core Routers | 2 |
+| Distribution Switches | 2 |
+| Access Switches | 6 |
+| Server Farm | 6 Servers |
+| VRFs | 5 |
+| VLANs | 5 |
 
 ### Headquarters
 
@@ -119,15 +145,16 @@ The following technologies were successfully validated:
 
 ## Repository Structure
 
-```text
-Enterprise-Multi-Site-Network-Infrastructure/
 
-├── Documentation/
+Enterprise-Multi-Site-Network-Infrastructure/
+│
 ├── Configurations/
-├── Topology/
+├── Documentation/
 ├── Screenshots/
-└── Videos/
-```
+├── Topology/
+├── Videos/
+├── LICENSE
+└── README.md
 
 ---
 
