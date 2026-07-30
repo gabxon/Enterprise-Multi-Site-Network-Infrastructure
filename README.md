@@ -145,7 +145,7 @@ The following technologies were successfully validated:
 
 ## Repository Structure
 
-
+```text
 Enterprise-Multi-Site-Network-Infrastructure/
 │
 ├── Configurations/
@@ -155,9 +155,7 @@ Enterprise-Multi-Site-Network-Infrastructure/
 ├── Videos/
 ├── LICENSE
 └── README.md
-
----
-
+```
 ## Future Enhancements
 
 Future versions of this project may include:
