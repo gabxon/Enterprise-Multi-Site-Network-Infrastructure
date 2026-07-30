@@ -1,1 +1,202 @@
-
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+service compress-config
+!
+hostname DIST-2
+!
+boot-start-marker
+boot-end-marker
+!
+vrf definition VRF-ENGINEERING
+ rd 65000:30
+ !
+ address-family ipv4
+ exit-address-family
+!
+vrf definition VRF-FINANCE
+ rd 65000:10
+ !
+ address-family ipv4
+ exit-address-family
+!
+vrf definition VRF-HR
+ rd 65000:20
+ !
+ address-family ipv4
+ exit-address-family
+!
+vrf definition VRF-MANAGEMENT
+ rd 65000:60
+ !
+ address-family ipv4
+ exit-address-family
+!
+vrf definition VRF-SERVERS
+ rd 65000:50
+ !
+ address-family ipv4
+ exit-address-family
+!
+enable secret <configured>
+!
+username admin privilege 15 secret <configured>
+!
+no aaa new-model
+!
+no ip domain-lookup
+ip domain-name enterprise.lab
+ip cef
+no ipv6 cef
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+spanning-tree vlan 10,20,30,50,60 priority 28672
+!
+interface Loopback0
+ description OSPF Router-ID
+ ip address 20.20.255.1 255.255.255.255
+!
+interface Port-channel2
+ switchport trunk allowed vlan 10,20,30,50,60
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Port-channel4
+ switchport trunk allowed vlan 50
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/0
+ description *** TO CORE-2 ***
+ no switchport
+ ip address 10.1.3.2 255.255.255.252
+ ip ospf network point-to-point
+!
+interface Ethernet0/1
+ switchport trunk allowed vlan 10,20,30,50,60
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 2 mode active
+!
+interface Ethernet0/2
+ switchport trunk allowed vlan 10,20,30,50,60
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 2 mode active
+!
+interface Ethernet0/3
+ switchport trunk allowed vlan 10,20,30,50,60
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet1/0
+ switchport trunk allowed vlan 10,20,30,50,60
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet1/1
+ switchport trunk allowed vlan 50
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 4 mode active
+!
+interface Ethernet1/2
+ switchport trunk allowed vlan 50
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 4 mode active
+!
+interface Ethernet1/3
+!
+interface Ethernet2/0
+!
+interface Ethernet2/1
+!
+interface Ethernet2/2
+!
+interface Ethernet2/3
+!
+interface Vlan10
+ description FINANCE GATEWAY
+ vrf forwarding VRF-FINANCE
+ ip address 10.10.10.2 255.255.255.0
+ standby version 2
+ standby 10 ip 10.10.10.254
+ standby 10 preempt
+!
+interface Vlan20
+ description HR GATEWAY
+ vrf forwarding VRF-HR
+ ip address 10.20.20.2 255.255.255.0
+ standby version 2
+ standby 20 ip 10.20.20.254
+ standby 20 preempt
+!
+interface Vlan30
+ description ENGINEERING GATEWAY
+ vrf forwarding VRF-ENGINEERING
+ ip address 10.30.30.2 255.255.255.0
+ standby version 2
+ standby 30 ip 10.30.30.254
+ standby 30 preempt
+!
+interface Vlan50
+ description SERVER FARM
+ vrf forwarding VRF-SERVERS
+ ip address 10.50.50.2 255.255.255.0
+ standby version 2
+ standby 50 ip 10.50.50.254
+ standby 50 preempt
+!
+interface Vlan60
+ description MANAGEMENT
+ vrf forwarding VRF-MANAGEMENT
+ ip address 10.60.60.2 255.255.255.0
+ standby version 2
+ standby 60 ip 10.60.60.254
+ standby 60 preempt
+!
+router ospf 1
+ router-id 20.20.255.1
+ passive-interface default
+ no passive-interface Ethernet0/0
+ network 10.1.3.0 0.0.0.3 area 0
+ network 10.30.30.0 0.0.0.255 area 20
+ network 10.50.50.0 0.0.0.255 area 20
+ network 10.60.60.0 0.0.0.255 area 20
+ network 20.20.255.1 0.0.0.0 area 20
+!
+ip forward-protocol nd
+!
+ip http server
+ip http secure-server
+!
+ip ssh version 2
+ip ssh server algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+ip ssh client algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+!
+control-plane
+!
+banner motd ^C
+***********************************************************
+* Unauthorized access is prohibited.                      *
+* Tier-1 Financial Enterprise Lab                         *
+* Project Author: Gabriel Tobi Idowu                      *
+***********************************************************
+^C
+!
+line con 0
+ exec-timeout 15 0
+ logging synchronous
+ login local
+!
+line aux 0
+!
+line vty 0 4
+ login local
+ transport input ssh
+!
+end
