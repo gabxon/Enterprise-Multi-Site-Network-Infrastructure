@@ -1,1 +1,136 @@
-
+!
+version 15.7
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname EDGE-1
+!
+boot-start-marker
+boot-end-marker
+!
+enable secret <configured>
+!
+no aaa new-model
+!
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+no ip domain lookup
+ip domain name enterprise.lab
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+username admin privilege 15 secret <configured>
+!
+redundancy
+!
+policy-map TEST-QOS
+ class class-default
+!
+interface Loopback0
+ ip address 11.11.11.11 255.255.255.255
+!
+interface Ethernet0/0
+ description TO ISP-1
+ ip address 100.100.100.2 255.255.255.252
+ duplex auto
+!
+interface Ethernet0/1
+ description TO-CORE-1
+ ip address 10.255.0.2 255.255.255.252
+ ip ospf network point-to-point
+ ip ospf bfd
+ duplex auto
+ bfd interval 50 min_rx 50 multiplier 3
+!
+interface Ethernet0/2
+ description *** EDGE-1 to EDGE-2 ***
+ ip address 10.255.255.1 255.255.255.252
+ duplex auto
+!
+interface Ethernet0/3
+ description TO_HUB1
+ ip address 172.16.100.1 255.255.255.252
+ duplex auto
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+ duplex auto
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+ duplex auto
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+ duplex auto
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+ duplex auto
+!
+router ospf 1
+ router-id 11.11.11.11
+ network 10.255.0.0 0.0.0.3 area 0
+ network 11.11.11.11 0.0.0.0 area 0
+ network 172.16.100.0 0.0.0.3 area 100
+!
+router bgp 65001
+ bgp log-neighbor-changes
+ network 11.11.11.11 mask 255.255.255.255
+ neighbor 10.255.255.2 remote-as 65001
+ neighbor 10.255.255.2 description iBGP-EDGE2
+ neighbor 10.255.255.2 next-hop-self
+ neighbor 100.100.100.1 remote-as 6501
+ neighbor 100.100.100.1 description ISP-1
+ neighbor 100.100.100.1 route-map ISP1-IN in
+ neighbor 100.100.100.1 route-map TO-ISP out
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+ip ssh version 2
+!
+ip prefix-list ENTERPRISE-ONLY seq 10 permit 11.11.11.11/32
+ip prefix-list ENTERPRISE-ONLY seq 20 permit 22.22.22.22/32
+!
+ipv6 ioam timestamp
+!
+route-map ISP1-IN permit 10
+ set local-preference 200
+!
+route-map TO-ISP permit 10
+ match ip address prefix-list ENTERPRISE-ONLY
+!
+control-plane
+!
+banner motd ^C
+***********************************************************
+* Unauthorized access is prohibited.                      *
+* Tier-1 Financial Enterprise Lab                         *
+* Project Author: Gabriel Tobi Idowu                      *
+***********************************************************
+^C
+!
+line con 0
+ exec-timeout 15 0
+ logging synchronous
+ login local
+!
+line aux 0
+!
+line vty 0 4
+ login local
+ transport input ssh
+!
+end
