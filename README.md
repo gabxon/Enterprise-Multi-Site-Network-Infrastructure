@@ -12,9 +12,21 @@ The environment simulates a headquarters campus connected to four international 
 
 ## Network Topology
 
-> **Enterprise Multi-Site Network Topology**
+![Enterprise Multi-Site Network Infrastructure](Topology/Enterprise-Multi-Site-Network-Infrastructure.png)
 
-> *(Upload your topology image into the `Topology` folder and then replace this text with the image.)*
+### High-Level Architecture
+
+The enterprise network consists of:
+
+- Dual ISP Internet Edge
+- Dual Edge Routers (eBGP & iBGP)
+- Redundant Core Backbone (OSPF + BFD)
+- Redundant Distribution Layer (HSRP + VRF-Lite)
+- Layer 2 Access Network
+- Dedicated Server Farm
+- Dual DMVPN Hub Architecture
+- Four International Branch Offices
+
 
 ---
 
