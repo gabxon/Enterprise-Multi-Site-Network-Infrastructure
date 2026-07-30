@@ -1,1 +1,128 @@
-
+!
+version 15.7
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname CORE-2
+!
+boot-start-marker
+boot-end-marker
+!
+enable secret <configured>
+!
+no aaa new-model
+!
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+no ip domain lookup
+ip domain name enterprise.lab
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+username admin privilege 15 secret <configured>
+!
+redundancy
+!
+interface Loopback0
+ description OSPF Router-ID
+ ip address 2.2.2.2 255.255.255.255
+!
+interface Ethernet0/0
+ description TO-EDGE-2
+ ip address 10.255.0.5 255.255.255.252
+ ip ospf network point-to-point
+ ip ospf bfd
+ duplex auto
+ bfd interval 50 min_rx 50 multiplier 3
+!
+interface Ethernet0/1
+ description *** CORE BACKBONE LINK-1 TO CORE-1 ***
+ ip address 10.1.1.2 255.255.255.252
+ ip ospf network point-to-point
+ ip ospf bfd
+ duplex auto
+ bfd interval 50 min_rx 50 multiplier 3
+!
+interface Ethernet0/2
+ description *** CORE BACKBONE LINK-2 TO CORE-1 ***
+ ip address 10.1.1.6 255.255.255.252
+ ip ospf network point-to-point
+ ip ospf bfd
+ duplex auto
+ bfd interval 50 min_rx 50 multiplier 3
+!
+interface Ethernet0/3
+ description *** TO DIST-2 ***
+ ip address 10.1.3.1 255.255.255.252
+ ip ospf network point-to-point
+ duplex auto
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+ duplex auto
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+ duplex auto
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+ duplex auto
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+ duplex auto
+!
+router ospf 1
+ router-id 2.2.2.2
+ passive-interface default
+ no passive-interface Ethernet0/0
+ no passive-interface Ethernet0/1
+ no passive-interface Ethernet0/2
+ no passive-interface Ethernet0/3
+ network 2.2.2.2 0.0.0.0 area 0
+ network 10.1.1.0 0.0.0.3 area 0
+ network 10.1.1.4 0.0.0.3 area 0
+ network 10.1.3.0 0.0.0.3 area 0
+ network 10.255.0.4 0.0.0.3 area 0
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+ip ssh version 2
+!
+ipv6 ioam timestamp
+!
+control-plane
+!
+banner motd ^C
+***********************************************************
+* Unauthorized access is prohibited.                      *
+* Tier-1 Financial Enterprise Lab                         *
+* Project Author: Gabriel Tobi Idowu                      *
+***********************************************************
+^C
+!
+line con 0
+ exec-timeout 15 0
+ logging synchronous
+ login local
+!
+line aux 0
+!
+line vty 0 4
+ login local
+ transport input ssh
+!
+end
