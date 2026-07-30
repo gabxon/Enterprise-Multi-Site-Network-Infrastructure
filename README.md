@@ -15,7 +15,7 @@ The environment simulates a headquarters campus connected to four international 
   <img src="Topology/topology.png" alt="Enterprise Multi-Site Network Infrastructure" width="100%">
 </p>
 
-### High-Level Architecture
+### Architecture Overview
 
 The enterprise network consists of:
 
