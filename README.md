@@ -9,10 +9,11 @@ The solution follows a hierarchical campus architecture with a redundant Interne
 The environment simulates a headquarters campus connected to four international branch offices through a highly available WAN infrastructure.
 
 ---
+<h2 align="center">Network Topology</h2>
 
-## Network Topology
-
-![Enterprise Multi-Site Network Infrastructure](Topology/topology.png)
+<p align="center">
+  <img src="Topology/topology.png" alt="Enterprise Multi-Site Network Infrastructure" width="100%">
+</p>
 
 ### High-Level Architecture
 
